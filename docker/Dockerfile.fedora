@@ -1,0 +1,11 @@
+FROM fedora
+RUN mkdir /jdk
+VOLUME /jdk
+WORKDIR /jdk
+
+RUN dnf -y groupinstall "Development Tools"
+RUN dnf -y install make autoconf java-latest-openjdk java-latest-openjdk-devel
+RUN dnf -y install zip unzip file findutils which libXtst-devel libXt-devel libXrender-devel libXi-devel cups-devel freetype-devel alsa-lib-devel libffi-devel gcc-c++ libXtst-devel libXrandr-devel fontconfig-devel
+
+CMD bash configure --with-extra-cflags='-Wno-stringop-overflow -Wno-stringop-truncation'
+CMD make hotspot
