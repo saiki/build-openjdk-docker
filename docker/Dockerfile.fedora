@@ -1,13 +1,12 @@
 FROM fedora
+
+RUN  dnf upgrade -y \
+	&& dnf -y groupinstall "Development Tools" \
+	&& dnf -y install make autoconf java-latest-openjdk java-latest-openjdk-devel zip unzip file findutils which libXtst-devel libXt-devel libXrender-devel libXi-devel cups-devel freetype-devel alsa-lib-devel libffi-devel gcc-c++ libXtst-devel libXrandr-devel fontconfig-devel mercurial
+
 RUN mkdir /jdk
 VOLUME /jdk
 WORKDIR /jdk
+COPY startup.sh /
 
-RUN dnf -y groupinstall "Development Tools"
-RUN dnf -y install make autoconf java-latest-openjdk java-latest-openjdk-devel
-RUN dnf -y install zip unzip file findutils which libXtst-devel libXt-devel libXrender-devel libXi-devel cups-devel freetype-devel alsa-lib-devel libffi-devel gcc-c++ libXtst-devel libXrandr-devel fontconfig-devel mercurial
-RUN hg clone https://hg.openjdk.java.net/jdk/jdk /jdk
-
-RUN hg pull && hg update
-CMD bash configure --with-extra-cflags='-Wno-stringop-overflow -Wno-stringop-truncation'
-CMD make
+ENTRYPOINT ["/startup.sh"]
